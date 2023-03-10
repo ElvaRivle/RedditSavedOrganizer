@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Mvc;
 using RedditOrganizeSaved.Models;
 using Reddit;
@@ -19,6 +20,11 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        return View();
+    }
+
+    public void Successful_GET()
+    {
         string appId = _configuration.GetValue<string>("Reddit:appId");
         string appSecret = _configuration.GetValue<string>("Reddit:appSecret");
         string accessToken = _configuration.GetValue<string>("Reddit:accessToken");
@@ -26,10 +32,11 @@ public class HomeController : Controller
         RedditClient reddit = new RedditClient(appId, null, appSecret,
             accessToken, "RedditOrganizer/0.1 by __rusmir__");
 
-        var spaseni = reddit.Account.Me.GetPostHistory("saved");
-        ViewBag.username = reddit.Account.Me.Name;
+        //var spaseni = reddit.Account.Me.GetPostHistory("saved", count: 25, after: "t3_ogc2kj");
+        var spaseni2 = reddit.Account.Me.GetCommentHistory(where: "saved");
+        ViewBag.spaseni = spaseni2;
 
-        return View();
+        //return View();
     }
 
     public IActionResult Privacy()
