@@ -9,16 +9,20 @@ namespace RedditOrganizeSaved.Data
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Category> Categories { get; set; } = default!;
+        private readonly DbContextOptions _options;
+        public DbSet<Category>? Categories { get; set; }
 
         public ApplicationDbContext (DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            _options = options;
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Category>().ToTable("Categories");
         }
     }
 }
